@@ -13,22 +13,26 @@ namespace ElasticSearch.Client.Transport
 		public static readonly ESNodeManager Instance = new ESNodeManager();
 		private static readonly LogWrapper logger = LogWrapper.GetLogger();
 		private readonly Random _rand;
-		private ElasticSearchConfig _config;
+		//private ElasticSearchConfig _config;
 		private Dictionary<string,TransportType>Clusters=new Dictionary<string, TransportType>();
 		private Dictionary<string ,List<string>>  ClusterHttpNodes=new Dictionary<string, List<string>>();
 		private Dictionary<string ,List<ESNode>>   ClusterThriftNodes=new Dictionary<string, List<ESNode>>();
 
 		private ESNodeManager()
 		{
-			_config = ElasticSearchConfig.Instance;
+		    var config = ElasticSearchConfig.Instance;
 
-			foreach (var esNode in _config.Clusters)
-			{
-				BuildCluster(esNode.ClusterName,esNode.TransportType);
-				ClusterThriftNodes[esNode.ClusterName] = BuildThriftNodes(esNode.ThriftNodes);
-				ClusterHttpNodes[esNode.ClusterName] = BuildHttpNodes(esNode.HttpNodes);
-			}
-			_rand = new Random((int) DateTime.Now.Ticks);
+            if (config != null && config.Clusters != null)
+            {
+                foreach (var esNode in config.Clusters)
+                {
+                    BuildCluster(esNode.ClusterName, esNode.TransportType);
+                    ClusterThriftNodes[esNode.ClusterName] = BuildThriftNodes(esNode.ThriftNodes);
+                    ClusterHttpNodes[esNode.ClusterName] = BuildHttpNodes(esNode.HttpNodes);
+                }
+            }
+
+		    _rand = new Random((int) DateTime.Now.Ticks);
 			ElasticSearchConfig.ConfigChanged += ElasticSearchConfig_ConfigChanged;
 		}
 
@@ -38,8 +42,8 @@ namespace ElasticSearch.Client.Transport
 			if (elasticSearchConfig != null)
 			{
 				logger.Info("ElasticSearchConfig config reloading");
-				_config = elasticSearchConfig;
-				foreach (var esNode in _config.Clusters)
+				var config = elasticSearchConfig;
+				foreach (var esNode in config.Clusters)
 				{
 					 BuildCluster(esNode.ClusterName,esNode.TransportType);
 					 ClusterThriftNodes[esNode.ClusterName] = BuildThriftNodes(esNode.ThriftNodes);

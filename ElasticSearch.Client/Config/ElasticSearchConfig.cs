@@ -71,9 +71,16 @@ namespace ElasticSearch.Client.Config
 
 		private static T LoadConfig<T>(string xmlPath) where T : class
 		{
+		    string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xmlPath);
+
+            if(!File.Exists(fileName))
+            {
+                return null;
+            }
+
 			try
 			{
-				using (var xml = new XmlTextReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xmlPath)))
+				using (var xml = new XmlTextReader(fileName))
 				{
 					var config = NetReflector.Read(xml) as T;
 					xml.Close();
@@ -82,7 +89,7 @@ namespace ElasticSearch.Client.Config
 			}
 			catch (System.Exception exp)
 			{
-				throw new ElasticSearchException("Failed on loading config !", exp);
+			    throw new ElasticSearchException("Failed to load config", exp);
 			}
 		}
 		
