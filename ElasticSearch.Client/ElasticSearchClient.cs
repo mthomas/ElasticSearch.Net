@@ -20,6 +20,11 @@ namespace ElasticSearch.Client
 	/// </summary>
 	public class ElasticSearchClient
 	{
+        public static void BuildCustomNodes(string clusterName, string ip, int port, TransportType transportType, bool isFramed=false)
+        {
+            ESNodeManager.Instance.BuildCustomNodes(clusterName, ip, port, transportType, isFramed);
+        }
+
 		private readonly LogWrapper _logger = LogWrapper.GetLogger();
 		private readonly RestProvider _provider;
 
