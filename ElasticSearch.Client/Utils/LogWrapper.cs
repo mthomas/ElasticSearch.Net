@@ -33,35 +33,8 @@ namespace ElasticSearch.Client.Utils
 			if (configFile.Exists)
 			{
 				configFile = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, loggingConfigFile));
+                XmlConfigurator.ConfigureAndWatch(configFile);
 			}
-			else
-			{
-				FileStream file = File.Create(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, loggingConfigFile));
-				var sw = new StreamWriter(file);
-				sw.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-				sw.WriteLine("<log4net debug=\"true\">");
-				sw.WriteLine("<appender name=\"RollingLogRootFileAppender\" type=\"log4net.Appender.RollingFileAppender\">");
-				sw.WriteLine("<file value=\"Logs\\log.txt\" />");
-				sw.WriteLine("<appendToFile value=\"true\" />");
-				sw.WriteLine("<maxSizeRollBackups value=\"100\" />");
-				sw.WriteLine("<maximumFileSize value=\"1MB\" />");
-				sw.WriteLine("<rollingStyle   value= \"Date\"   />");
-				sw.WriteLine("<datePattern   value= \"yyyyMMdd\"   />");
-				sw.WriteLine("<layout type=\"log4net.Layout.PatternLayout\">");
-				sw.WriteLine("<conversionPattern value=\"%date %-5level %logger - %message%newline\" />");
-				sw.WriteLine("</layout>");
-				sw.WriteLine("</appender>");
-				sw.WriteLine("<root>");
-				sw.WriteLine("<level value=\"DEBUG\" />");
-				sw.WriteLine("<appender-ref ref=\"RollingLogRootFileAppender\" />");
-				sw.WriteLine("</root>");
-				sw.WriteLine("</log4net>");
-				sw.Flush();
-				sw.Close();
-				configFile = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, loggingConfigFile));
-			}
-
-			XmlConfigurator.ConfigureAndWatch(configFile);
 		}
 
 		/// <summary>
