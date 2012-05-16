@@ -6,3 +6,4 @@ TestResults
 _ReSharper.*
 *.suo
 *.user
+build/*.dll
