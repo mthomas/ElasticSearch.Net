@@ -46,8 +46,8 @@
     <Reference Include="Aga.Controls">
       <HintPath>..\libs\Aga.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="Json.Net.3.5">
-      <HintPath>..\libs\Json.Net.3.5.dll</HintPath>
+    <Reference Include="Json.Net.4.5">
+      <HintPath>..\libs\Json.Net.4.5.dll</HintPath>
     </Reference>
     <Reference Include="JsonViewer">
       <HintPath>..\libs\JsonViewer.dll</HintPath>
@@ -86,6 +86,9 @@
     </Compile>
     <Compile Include="Dialogs\FormBase.Designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\GetInput.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Dialogs\JsonView.cs">
       <SubType>Form</SubType>
@@ -127,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FormBase.resx">
       <DependentUpon>FormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\GetInput.resx">
+      <DependentUpon>GetInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\JsonView.resx">
       <DependentUpon>JsonView.cs</DependentUpon>

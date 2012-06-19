@@ -44,7 +44,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\Json.Net.3.5.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
+    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Lucene.Net.2.9, Version=2.9.2.1, Culture=neutral, processorArchitecture=MSIL">
@@ -60,6 +61,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
