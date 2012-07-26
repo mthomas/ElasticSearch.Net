@@ -1,10 +1,71 @@
 ﻿using System;
 using ElasticSearch;
 using ElasticSearch.Client;
+using ElasticSearch.Client.Config;
+using ElasticSearch.Client.QueryDSL;
 using NUnit.Framework;
 
 namespace Tests
 {
+    public class GameDataForList : GameData
+    {
+        public int Game { get; set; }
+    }
+
+    public class GameData
+    {
+        public string GameId { get; set; }
+
+        public int CurrentTurn { get; set; }
+        public int CurrentPlayerId { get; set; }
+
+        public int Status { get; set; }
+        public DateTime StartDate { get; set; }
+
+        public DateTime? LastTurnDate { get; set; }
+        public string LastTurnDescription { get; set; }
+
+        public int? ResigningPlayerId { get; set; }
+        public int? WinningPlayerId { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        public int StartContext { get; set; }
+
+        public int Version { get; set; }
+        public int? TutorialType { get; set; }
+    }
+
+    [TestFixture]
+    public class ScopelyIntegration
+    {
+        [Test]
+        public void CanScanDiceGames()
+        {
+            var client = new ElasticSearchClient("ec2-107-22-42-34.compute-1.amazonaws.com", 9500, TransportType.Thrift);
+
+            var startDate = DateTime.UtcNow.AddYears(-10).ToString("o");
+            var endDate = DateTime.UtcNow.ToString("o");
+
+            var lastTurnDate = new RangeQuery("LastTurnDate", startDate, endDate, true, true);
+
+            var results = client.Scan<GameDataForList>("dice", new[] {"gameindex"}, lastTurnDate, null, 10, "1m");
+
+            int i = 0;
+
+            foreach (var result in results)
+            {
+                i++;
+                Console.WriteLine("{0}: {1}", i, result.GameId);
+
+                if(i == 100)
+                {
+                    return;
+                }
+            }
+        }
+    }
+
 	[TestFixture]
 	public class Easy2Go
 	{

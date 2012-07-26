@@ -1056,5 +1056,75 @@ namespace ElasticSearch.Client
 		}
 
 		#endregion
+
+        public IEnumerable<T> Scan<T>(string index, string[] type, IQuery query, string[] fields, int size, string scroll)
+        {
+            var elasticQuery = new ElasticQuery(0, size);
+            elasticQuery.SetQuery(query);
+
+            if(fields != null)
+            {
+                elasticQuery.AddFields(fields);
+            }
+
+
+            string jsonstr = JsonSerializer.Get(elasticQuery);
+
+            string url;
+
+            if (type == null || type.Length == 0)
+            {
+                url = "/{0}/_search?search_type=scan&scroll={1}&size={2}".Fill(index.ToLower(), scroll, size);
+            }
+            else
+            {
+                url = "/{0}/{1}/_search?search_type=scan&scroll={2}&size={3}".Fill(index.ToLower(), string.Join(",", type), scroll, size);
+            }
+
+            var result = _provider.Post(url, jsonstr);
+
+            var scanResponse = JsonSerializer.Get<ScanResponse>(result.GetBody());
+
+            var foundAny = false;
+
+            var scrollUrl = "_search/scroll?scroll={0}".Fill(scroll);
+
+            do
+            {
+                var scrollResult = _provider.Post(scrollUrl, scanResponse._scroll_id);
+
+                var data = JsonSerializer.Get<ScanData<T>>(scrollResult.GetBody());
+
+                foundAny = false;
+
+                foreach(var hit in data.hits.hits)
+                {
+                    foundAny = true;
+                    yield return hit._source;
+                }
+
+            } while (foundAny);
+        } 
+
+        private class HitWrapper<T>
+        {
+            public HitData<T>[] hits;
+        }
+
+        private class HitData<T>
+        {
+            public T _source;
+        }
+
+        private class ScanData<T>
+        {
+            public HitWrapper<T> hits;
+        }
+
+        private class ScanResponse
+        {
+            public string _scroll_id;
+
+        }
 	}
 }

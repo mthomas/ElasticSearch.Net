@@ -40,9 +40,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Json.Net.3.5, Version=3.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Json.Net.4.5, Version=4.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\Json.Net.3.5.dll</HintPath>
+      <HintPath>..\libs\Json.Net.4.5.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
       <SpecificVersion>False</SpecificVersion>
