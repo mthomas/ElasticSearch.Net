@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using ElasticSearch;
 using ElasticSearch.Client;
 using ElasticSearch.Client.Config;
+using ElasticSearch.Client.Domain;
 using ElasticSearch.Client.QueryDSL;
 using NUnit.Framework;
 
@@ -40,6 +42,25 @@ namespace Tests
     public class ScopelyIntegration
     {
         [Test]
+        public void CanIndexGetGemsGame()
+        {
+            var id = Guid.NewGuid().ToString();
+
+            var client = new ElasticSearchClient("ec2-107-22-42-34.compute-1.amazonaws.com", 9500, TransportType.Thrift);
+            var data = new Dictionary<string, object> {{"GameId", "asdf"}};
+
+            var bulkObject = new BulkObject("gems","gameindex" , id, data);
+
+            client.Bulk(new List<BulkObject> {bulkObject});
+
+            var loaded = client.Get("gems", "gameindex", id);
+
+            Assert.IsNotNull(loaded);
+            Assert.IsNotNull(loaded.GetFields());
+            Assert.AreEqual("asdf", loaded.GetFields()["GameId"]);
+        }
+
+        [Test]
         public void CanScanDiceGames()
         {
             var client = new ElasticSearchClient("ec2-107-22-42-34.compute-1.amazonaws.com", 9500, TransportType.Thrift);
@@ -57,6 +78,8 @@ namespace Tests
             {
                 i++;
                 Console.WriteLine("{0}: {1}", i, result.GameId);
+
+                Assert.IsNotNull(result.GameId);
 
                 if(i == 100)
                 {

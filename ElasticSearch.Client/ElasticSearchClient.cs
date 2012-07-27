@@ -67,7 +67,7 @@ namespace ElasticSearch.Client
 			Contract.Assert(!string.IsNullOrEmpty(index));
 			Contract.Assert(!string.IsNullOrEmpty(type));
 			Contract.Assert(!string.IsNullOrEmpty(indexKey));
-			string jsonData = JsonSerializer.Get(dictionary);
+			string jsonData = JsonSerializer.GetForBulk(dictionary);
 			Contract.Assert(!string.IsNullOrEmpty(jsonData));
 
 			return Index(index, type, indexKey, jsonData, parentKey);

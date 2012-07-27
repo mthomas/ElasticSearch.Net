@@ -53,7 +53,7 @@ namespace ElasticSearch.Client.Domain
 
 					if(bulkObject.Fields.Count>0)
 					{
-						stringBuilder.Append(JsonSerializer.Get(bulkObject.Fields));
+						stringBuilder.Append(JsonSerializer.GetForBulk(bulkObject.Fields));
 					}
 					else
 					{

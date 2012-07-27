@@ -17,6 +17,19 @@ namespace ElasticSearch.Client.Utils
 			Converters = new List<JsonConverter> { new IsoDateTimeConverter() }
 		};
 
+        static JsonSerializerSettings BulkSerializationSettings = new JsonSerializerSettings()
+        {
+            //ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            Converters = new List<JsonConverter> { new IsoDateTimeConverter() }
+        };
+
+        public static string GetForBulk<T>(T t)
+        {
+            var json = JsonConvert.SerializeObject(t, Formatting.None, BulkSerializationSettings);
+            return json;
+        }
 
 		public static string Get<T>(T t)
 		{
